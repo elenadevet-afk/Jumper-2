@@ -1,70 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Platformer with Timer</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
+        #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
+        .card { background: #252525; padding: 10px; margin-bottom: 10px; border-left: 4px solid #ffea00; }
+        input { width: 90%; padding: 8px; margin: 5px 0; }
+        .btn-copy { background: #ffea00; color: black; padding: 15px; width: 100%; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; }
+    </style>
 </head>
-<body style="margin:0; padding:0; background: #87ceeb; overflow:hidden;">
+<body>
 
-<div id="game-container" style="width:400px; height:500px; position:relative;">
-    <div id="timer" style="position:absolute; top:10px; left:10px; font-size:24px; font-weight:bold; color:red; background:white; padding:5px; border-radius:5px;">5:00</div>
-    
-    <div id="player" style="position:absolute; top:20px; left:350px; width:40px; height:40px; background:red; transition:0.5s;"></div>
-    
-    <div id="platforms"></div>
+<div id="panel">
+    <h2>Quest Settings 🛠️</h2>
+    <button class="btn-copy" onclick="copyCode()">COPY CODE FOR GENIALLY</button>
+</div>
 
-    <div id="menu" style="position:absolute; bottom:0; width:100%; height:150px; background:black; color:white; text-align:center;">
-        <p id="question">Вопрос 1?</p>
-        <button onclick="check(true)">ПРАВИЛЬНО</button>
-        <button onclick="check(false)">НЕПРАВИЛЬНО</button>
-    </div>
+<div id="view" style="flex-grow:1; display:flex; justify-content:center; align-items:center;">
+    <div id="preview-frame" style="background:#87ceeb; width:400px; height:500px;"></div>
 </div>
 
 <script>
-    let lvl = 0;
-    let time = 300;
-    const player = document.getElementById('player');
-    const timerDisplay = document.getElementById('timer');
-    
-    // Платформы
-    const platformCoords = [
-        {x: 280, y: 120},
-        {x: 240, y: 165},
-        {x: 200, y: 210}
-    ];
-
-    // Отрисовка платформ
-    platformCoords.forEach(p => {
-        const div = document.createElement('div');
-        div.style.position = 'absolute';
-        div.style.left = p.x + 'px';
-        div.style.top = p.y + 'px';
-        div.style.width = '50px';
-        div.style.height = '10px';
-        div.style.background = 'green';
-        document.getElementById('platforms').appendChild(div);
-    });
-
-    // Таймер
-    setInterval(() => {
-        time--;
-        let m = Math.floor(time / 60);
-        let s = time % 60;
-        timerDisplay.innerText = m + ":" + (s < 10 ? "0" + s : s);
-    }, 1000);
-
-    // Логика движения
-    function check(isCorrect) {
-        if (isCorrect && lvl < platformCoords.length) {
-            player.style.left = (platformCoords[lvl].x + 5) + 'px';
-            player.style.top = (platformCoords[lvl].y - 40) + 'px';
-            lvl++;
-        } else {
-            player.style.top = '20px';
-            player.style.left = '350px';
-            lvl = 0;
-        }
+    function getCode() {
+        return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
+            <div id="g" style="position:relative;width:400px;height:500px">
+                <div id="timer" style="position:absolute; top:10px; right:10px; font-family:monospace; font-size:24px; color:black; background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:5px; border:2px solid #333;">05:00</div>
+                
+                <div id="p" style="position:absolute;top:20px;left:350px;width:40px;height:40px;background:red;transition:0.5s ease-out"></div>
+            </div>
+            
+            <script>
+                let time = 300; // 5 минут в секундах
+                const timerEl = document.getElementById("timer");
+                
+                // Функция обновления часов
+                function updateTimer() {
+                    let m = Math.floor(time / 60);
+                    let s = time % 60;
+                    timerEl.innerText = (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
+                    if(time > 0) {
+                        time--;
+                        setTimeout(updateTimer, 1000);
+                    }
+                }
+                updateTimer();
+            <\/script></body></html>' width="400" height="500" frameborder="0"></iframe>`;
     }
+    
+    function draw() { document.getElementById('preview-frame').innerHTML = getCode(); }
+    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Code copied!"); }
+    draw();
 </script>
-
 </body>
 </html>
