@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Step Down) ⬇️</title>
+    <title>Platformer Builder (Precise Step Down) ⬇️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -89,7 +89,8 @@
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
                     const x = 320 - (i * 40), y = 400 - (i * 40);
-                    platformCoords.push({x: x, y: 500 - y - ${pSize}});
+                    // y - 5 (корректировка)
+                    platformCoords.push({x: x, y: 500 - y - ${pSize} + 5}); 
                     d.style="position:absolute;width:50px;height:10px;background:${pCol};right:"+ (400 - x - 50) +"px;top:"+ (500 - y - 10) +"px;border-radius:5px";
                     document.getElementById("g").appendChild(d);
                 });
