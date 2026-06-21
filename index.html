@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Sloped Steps) 🛠️</title>
+    <title>Platformer Builder (9 Levels) 🛠️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -62,68 +62,10 @@
         
         return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
             <div id="g" style="position:relative;width:400px;height:500px">
-                <div id="p" style="position:absolute;top:50px;left:300px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
+                <div id="p" style="position:absolute;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
                 <div id="info-panel" style="position:absolute;top:5px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:100;">
                     <div id="clock" style="font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val">00:00</span></div>
                     <div id="l" style="font-size:24px;text-align:left;"></div>
                 </div>
             </div>
-            <div id="msg-box" style="display:none; position:absolute; top:100px; left:50px; width:300px; padding:20px; border:2px solid ${winBorder}; background:${winBg}; color:${winCol}; font-size:24px; font-weight:bold; text-align:center; border-radius:15px; z-index:100;">${winText}</div>
-            <div id="m" style="position:absolute;bottom:0px;right:0px;width:200px;height:180px;background:${mCol};opacity:0.9;padding:10px;text-align:center;color:${txtCol};z-index:50">
-                <h3 id="q" style="margin:5px 0; font-size:14px;"></h3>
-                <button id="b1" onclick="check(true)" style="display:block;width:100%;margin-bottom:5px;cursor:pointer;background:${btnCol};color:${txtCol};border:none;padding:8px"></button>
-                <button id="b2" onclick="check(false)" style="display:block;width:100%;cursor:pointer;background:${btnCol};color:${txtCol};border:none;padding:8px"></button>
-            </div>
-            <script>
-                const tasks=${data}, p=document.getElementById("p"), q=document.getElementById("q"), b1=document.getElementById("b1"), b2=document.getElementById("b2"), lDiv=document.getElementById("l"), tVal=document.getElementById("time-val");
-                let lvl=0, lives=${livesCount}, timeLeft=${timeLimit}, interval;
-                
-                function updateClock() {
-                    let m = Math.floor(timeLeft / 60);
-                    let s = timeLeft % 60;
-                    tVal.innerText = (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
-                    if (timeLeft > 0) timeLeft--;
-                    else { clearInterval(interval); location.reload(); }
-                }
-                if(${timeLimit} > 0) { updateClock(); interval = setInterval(updateClock, 1000); }
-
-                const pSize = ${pSize}, platHeight = 10;
-                const platformData = [];
-                tasks.forEach((_,i)=>{
-                    const d=document.createElement("div");
-                    // Пологая лестница: меньший шаг по Y (25), больший шаг по X (35)
-                    const topPos = 60 + (i * 35), leftPos = 300 - (i * 35);
-                    platformData.push({x: leftPos, y: topPos});
-                    d.style="position:absolute;width:60px;height:"+platHeight+"px;background:${pCol};left:"+leftPos+"px;top:"+topPos+"px;border-radius:5px";
-                    document.getElementById("g").appendChild(d);
-                });
-
-                function updateHearts(){ lDiv.innerText="❤️".repeat(lives); }
-                updateHearts();
-                function show(){ 
-                    q.innerText=tasks[lvl].q; const c=Math.random()>0.5;
-                    b1.innerText=c?tasks[lvl].right:tasks[lvl].wrong; b2.innerText=c?tasks[lvl].wrong:tasks[lvl].right;
-                    b1.dataset.r=c; b2.dataset.r=!c;
-                }
-                function check(c){
-                    const r = c?(b1.dataset.r==="true"):(b2.dataset.r==="true");
-                    if(r){ 
-                        p.style.top = (platformData[lvl].y - pSize) + "px";
-                        p.style.left = (platformData[lvl].x + 5) + "px";
-                        lvl++; 
-                        if(lvl>=tasks.length) { document.getElementById("msg-box").style.display="block"; clearInterval(interval); } else show(); 
-                    } else { 
-                        lives--; updateHearts();
-                        if(lives<=0){ location.reload(); } else { p.style.top="60px"; p.style.left="300px"; lvl=0; show(); }
-                    }
-                }
-                show();
-            <\/script></body></html>' width="400" height="500" frameborder="0" allowtransparency="true"></iframe>`;
-    }
-
-    function draw() { document.getElementById('preview-frame').innerHTML = getCode(); }
-    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Code copied!"); }
-    renderEditor(); draw();
-</script>
-</body>
-</html>
+            <div id="msg-box" style="display:none; position:absolute; top:100px; left:50px; width:300px
