@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Extra Sloped) 🛠️</title>
+    <title>Platformer Builder (Sloped & Shifted Right) 🛠️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -62,7 +62,7 @@
         
         return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
             <div id="g" style="position:relative;width:400px;height:500px">
-                <div id="p" style="position:absolute;top:20px;left:350px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
+                <div id="p" style="position:absolute;top:20px;left:150px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
                 <div id="info-panel" style="position:absolute;top:5px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:100;">
                     <div id="clock" style="font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val">00:00</span></div>
                     <div id="l" style="font-size:24px;text-align:left;"></div>
@@ -91,8 +91,8 @@
                 const platformData = [];
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
-                    // Теперь еще более пологая лестница
-                    const topPos = 100 + (i * 30), leftPos = 350 - (i * 36);
+                    // Лестница сдвинута вправо
+                    const topPos = 100 + (i * 30), leftPos = 150 + (i * 20);
                     platformData.push({x: leftPos, y: topPos});
                     d.style="position:absolute;width:50px;height:"+platHeight+"px;background:${pCol};left:"+leftPos+"px;top:"+topPos+"px;border-radius:5px";
                     document.getElementById("g").appendChild(d);
@@ -114,7 +114,7 @@
                         if(lvl>=tasks.length) { document.getElementById("msg-box").style.display="block"; clearInterval(interval); } else show(); 
                     } else { 
                         lives--; updateHearts();
-                        if(lives<=0){ location.reload(); } else { p.style.top="20px"; p.style.left="350px"; lvl=0; show(); }
+                        if(lives<=0){ location.reload(); } else { p.style.top="20px"; p.style.left="150px"; lvl=0; show(); }
                     }
                 }
                 show();
