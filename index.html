@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Precise Step Down) ⬇️</title>
+    <title>Platformer Builder (Fixed Step) ⬇️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -61,7 +61,7 @@
         
         return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
             <div id="g" style="position:relative;width:400px;height:500px">
-                <div id="p" style="position:absolute;top:20px;right:20px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.8s ease-in-out"></div>
+                <div id="p" style="position:absolute;top:20px;right:20px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.8s ease-in-out;z-index:20"></div>
                 <div id="info-panel" style="position:absolute;top:5px;left:10px;display:flex;flex-direction:column;gap:5px;">
                     <div id="clock" style="font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val"></span></div>
                     <div id="l" style="font-size:24px;text-align:left;"></div>
@@ -76,6 +76,21 @@
             <script>
                 const tasks=${data}, p=document.getElementById("p"), q=document.getElementById("q"), b1=document.getElementById("b1"), b2=document.getElementById("b2"), lDiv=document.getElementById("l"), tVal=document.getElementById("time-val"), clock=document.getElementById("clock");
                 let lvl=0, lives=${livesCount}, timeLeft=${timeLimit}, interval;
+                
+                // Настройки геометрии ступенек
+                const stepW = 60, stepH = 10;
+                const startX = 320, startY = 80;
+                
+                const platformCoords = [];
+                tasks.forEach((_,i)=>{
+                    const d=document.createElement("div");
+                    const px = startX - (i * 45);
+                    const py = startY + (i * 45);
+                    platformCoords.push({x: px, y: py});
+                    d.style="position:absolute;width:"+stepW+"px;height:"+stepH+"px;background:${pCol};right:"+ (400 - px - stepW) +"px;top:"+ py +"px;border-radius:5px";
+                    document.getElementById("g").appendChild(d);
+                });
+
                 if(timeLeft<=0) clock.style.display="none";
                 else {
                     interval=setInterval(()=>{
@@ -85,41 +100,9 @@
                         if(timeLeft<=0){ clearInterval(interval); location.reload(); }
                     }, 1000);
                 }
-                const platformCoords = [];
-                tasks.forEach((_,i)=>{
-                    const d=document.createElement("div");
-                    const x = 320 - (i * 40), y = 400 - (i * 40);
-                    // y - 5 (корректировка)
-                    platformCoords.push({x: x, y: 500 - y - ${pSize} + 5}); 
-                    d.style="position:absolute;width:50px;height:10px;background:${pCol};right:"+ (400 - x - 50) +"px;top:"+ (500 - y - 10) +"px;border-radius:5px";
-                    document.getElementById("g").appendChild(d);
-                });
+
                 function updateHearts(){ lDiv.innerText="❤️".repeat(lives); }
                 updateHearts();
                 function show(){ 
                     q.innerText=tasks[lvl].q; const c=Math.random()>0.5;
-                    b1.innerText=c?tasks[lvl].right:tasks[lvl].wrong; b2.innerText=c?tasks[lvl].wrong:tasks[lvl].right;
-                    b1.dataset.r=c; b2.dataset.r=!c;
-                }
-                function check(c){
-                    const r = c?(b1.dataset.r==="true"):(b2.dataset.r==="true");
-                    if(r){ 
-                        p.style.right = (400 - platformCoords[lvl].x - ${pSize}/2) + "px";
-                        p.style.top = platformCoords[lvl].y + "px";
-                        lvl++; 
-                        if(lvl>=tasks.length) { document.getElementById("msg-box").style.display="block"; clearInterval(interval); } else show(); 
-                    } else { 
-                        lives--; updateHearts();
-                        if(lives<=0){ location.reload(); } else { p.style.top="20px"; p.style.right="20px"; lvl=0; show(); }
-                    }
-                }
-                show();
-            <\/script></body></html>' width="400" height="500" frameborder="0" allowtransparency="true"></iframe>`;
-    }
-
-    function draw() { document.getElementById('preview-frame').innerHTML = getCode(); }
-    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Code copied!"); }
-    renderEditor(); draw();
-</script>
-</body>
-</html>
+                    b1.innerText=c
