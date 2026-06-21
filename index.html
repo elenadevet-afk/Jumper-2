@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Fixed Ladder) 🛠️</title>
+    <title>Platformer Builder (Extra Sloped) 🛠️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -91,7 +91,8 @@
                 const platformData = [];
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
-                    const topPos = 100 + (i * 35), leftPos = 350 - (i * 32);
+                    // Теперь еще более пологая лестница
+                    const topPos = 100 + (i * 30), leftPos = 350 - (i * 36);
                     platformData.push({x: leftPos, y: topPos});
                     d.style="position:absolute;width:50px;height:"+platHeight+"px;background:${pCol};left:"+leftPos+"px;top:"+topPos+"px;border-radius:5px";
                     document.getElementById("g").appendChild(d);
