@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (9 Levels) 🛠️</title>
+    <title>Platformer Builder (Extended Slope) 🛠️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -37,7 +37,6 @@
 </div>
 
 <script>
-    // Установили 9 заданий
     let tasks = Array.from({length: 9}, (_, i) => ({q: "Question "+(i+1), right: "True", wrong: "False"}));
     
     function renderEditor() {
@@ -63,7 +62,7 @@
         
         return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
             <div id="g" style="position:relative;width:400px;height:500px">
-                <div id="p" style="position:absolute;top:70px;left:250px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
+                <div id="p" style="position:absolute;top:40px;left:280px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.5s ease-out;z-index:10"></div>
                 <div id="info-panel" style="position:absolute;top:5px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:100;">
                     <div id="clock" style="font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val">00:00</span></div>
                     <div id="l" style="font-size:24px;text-align:left;"></div>
@@ -92,8 +91,8 @@
                 const platformData = [];
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
-                    // Настройка шага: topPos (вертикаль), leftPos (горизонталь)
-                    const topPos = 80 + (i * 35), leftPos = 250 - (i * 25);
+                    // Ступени стали дальше (45) и лестница положе (15)
+                    const topPos = 50 + (i * 45), leftPos = 280 - (i * 15);
                     platformData.push({x: leftPos, y: topPos});
                     d.style="position:absolute;width:50px;height:"+platHeight+"px;background:${pCol};left:"+leftPos+"px;top:"+topPos+"px;border-radius:5px";
                     document.getElementById("g").appendChild(d);
@@ -115,7 +114,7 @@
                         if(lvl>=tasks.length) { document.getElementById("msg-box").style.display="block"; clearInterval(interval); } else show(); 
                     } else { 
                         lives--; updateHearts();
-                        if(lives<=0){ location.reload(); } else { p.style.top="70px"; p.style.left="250px"; lvl=0; show(); }
+                        if(lives<=0){ location.reload(); } else { p.style.top="40px"; p.style.left="280px"; lvl=0; show(); }
                     }
                 }
                 show();
