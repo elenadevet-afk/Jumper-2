@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (10 Questions) 🛠️</title>
+    <title>Platformer Builder (10 Steps) 🛠️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -37,7 +37,7 @@
 </div>
 
 <script>
-    // Изменил количество вопросов с 8 на 10
+    // Изменено: 10 элементов
     let tasks = Array.from({length: 10}, (_, i) => ({q: "Question "+(i+1), right: "True", wrong: "False"}));
     
     function renderEditor() {
@@ -92,8 +92,8 @@
                 const platformData = [];
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
-                    // Немного уплотнил шаги, чтобы 10 платформ поместились на экране
-                    const topPos = 80 + (i * 38), leftPos = 320 - (i * 30);
+                    // Скорректированы коэффициенты: 35 и 28, чтобы 10 штук уместились по высоте
+                    const topPos = 80 + (i * 35), leftPos = 320 - (i * 28);
                     platformData.push({x: leftPos, y: topPos});
                     d.style="position:absolute;width:50px;height:"+platHeight+"px;background:${pCol};left:"+leftPos+"px;top:"+topPos+"px;border-radius:5px";
                     document.getElementById("g").appendChild(d);
@@ -104,4 +104,27 @@
                 function show(){ 
                     q.innerText=tasks[lvl].q; const c=Math.random()>0.5;
                     b1.innerText=c?tasks[lvl].right:tasks[lvl].wrong; b2.innerText=c?tasks[lvl].wrong:tasks[lvl].right;
-                    b1.dataset.r=c; b2.dataset.
+                    b1.dataset.r=c; b2.dataset.r=!c;
+                }
+                function check(c){
+                    const r = c?(b1.dataset.r==="true"):(b2.dataset.r==="true");
+                    if(r){ 
+                        p.style.top = (platformData[lvl].y - pSize) + "px";
+                        p.style.left = (platformData[lvl].x + 5) + "px";
+                        lvl++; 
+                        if(lvl>=tasks.length) { document.getElementById("msg-box").style.display="block"; clearInterval(interval); } else show(); 
+                    } else { 
+                        lives--; updateHearts();
+                        if(lives<=0){ location.reload(); } else { p.style.top="20px"; p.style.left="350px"; lvl=0; show(); }
+                    }
+                }
+                show();
+            <\/script></body></html>' width="400" height="500" frameborder="0" allowtransparency="true"></iframe>`;
+    }
+
+    function draw() { document.getElementById('preview-frame').innerHTML = getCode(); }
+    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Code copied!"); }
+    renderEditor(); draw();
+</script>
+</body>
+</html>
