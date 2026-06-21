@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Platformer Builder (Спуск по ступеням) ⬇️</title>
+    <title>Platformer Builder (Step Down) ⬇️</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #121212; color: white; }
         #panel { width: 500px; background: #1a1a1a; padding: 20px; border-right: 2px solid #ffea00; overflow-y: auto; }
@@ -14,22 +14,22 @@
 <body>
 
 <div id="panel">
-    <h2>Настройка спуска ⬇️</h2>
-    Жизней: <input type="number" id="lives-count" value="3" min="1" max="10" oninput="draw()"><br>
-    Время (мин): <input type="number" id="time-limit" value="5" min="0" oninput="draw()"><br>
-    Цвет часов: <input type="color" id="timer-col" value="#ff0000" onchange="draw()"><br>
-    Текст победы: <input type="text" id="win-text" value="Победа!" oninput="draw()"><br>
-    Цвет финала (фон): <input type="color" id="win-bg" value="#000000" onchange="draw()"><br>
-    Цвет финала (рамка): <input type="color" id="win-border" value="#ffffff" onchange="draw()"><br>
-    Цвет финала (текст): <input type="color" id="win-col" value="#ffd700" onchange="draw()"><br>
-    Размер персонажа: <input type="range" id="p-size" min="20" max="60" value="40" oninput="draw()"><br>
-    Цвет текста: <input type="color" id="txt-col" value="#ffffff" onchange="draw()"><br>
-    Цвет панели заданий: <input type="color" id="m-col" value="#000000" onchange="draw()"><br>
-    Цвет кнопок: <input type="color" id="btn-col" value="#444444" onchange="draw()"><br>
-    Цвет платформ: <input type="color" id="p-col" value="#4caf50" onchange="draw()"><br>
-    URL персонажа: <input type="text" id="p-url" value="https://cdn-icons-png.flaticon.com/128/1997/1997576.png" oninput="draw()"><br>
+    <h2>Quest Settings 🛠️</h2>
+    Lives: <input type="number" id="lives-count" value="3" min="1" max="10" oninput="draw()"><br>
+    Time (min): <input type="number" id="time-limit" value="5" min="0" oninput="draw()"><br>
+    Timer Color: <input type="color" id="timer-col" value="#ff0000" onchange="draw()"><br>
+    Victory Text: <input type="text" id="win-text" value="Well done!" oninput="draw()"><br>
+    Win Panel Bg: <input type="color" id="win-bg" value="#000000" onchange="draw()"><br>
+    Win Panel Border: <input type="color" id="win-border" value="#ffffff" onchange="draw()"><br>
+    Win Text Color: <input type="color" id="win-col" value="#ffd700" onchange="draw()"><br>
+    Char Size: <input type="range" id="p-size" min="20" max="60" value="40" oninput="draw()"><br>
+    Text Color: <input type="color" id="txt-col" value="#ffffff" onchange="draw()"><br>
+    Task Panel Color: <input type="color" id="m-col" value="#000000" onchange="draw()"><br>
+    Buttons Color: <input type="color" id="btn-col" value="#444444" onchange="draw()"><br>
+    Platforms Color: <input type="color" id="p-col" value="#4caf50" onchange="draw()"><br>
+    Char URL: <input type="text" id="p-url" value="https://cdn-icons-png.flaticon.com/128/1997/1997576.png" oninput="draw()"><br>
     <div id="q-list"></div>
-    <button class="btn-copy" onclick="copyCode()">СКОПИРОВАТЬ КОД ДЛЯ GENIALLY</button>
+    <button class="btn-copy" onclick="copyCode()">COPY CODE FOR GENIALLY</button>
 </div>
 
 <div id="view" style="flex-grow:1; display:flex; justify-content:center; align-items:center;">
@@ -37,14 +37,14 @@
 </div>
 
 <script>
-    let tasks = Array.from({length: 8}, (_, i) => ({q: "Вопрос "+(i+1), right: "Верно", wrong: "Ошибка"}));
+    let tasks = Array.from({length: 8}, (_, i) => ({q: "Question "+(i+1), right: "True", wrong: "False"}));
     function renderEditor() {
-        const c = document.getElementById('q-list'); c.innerHTML = '<h3>Вопросы:</h3>';
+        const c = document.getElementById('q-list'); c.innerHTML = '<h3>Questions:</h3>';
         tasks.forEach((val, i) => {
             const d = document.createElement('div'); d.className = 'card';
             d.innerHTML = `Q${i+1}: <input type="text" value="${val.q}" oninput="tasks[${i}].q=this.value;draw()"><br>
-                Верно: <input type="text" value="${val.right}" oninput="tasks[${i}].right=this.value;draw()"><br>
-                Ошибка: <input type="text" value="${val.wrong}" oninput="tasks[${i}].wrong=this.value;draw()">`;
+                Correct: <input type="text" value="${val.right}" oninput="tasks[${i}].right=this.value;draw()"><br>
+                Wrong: <input type="text" value="${val.wrong}" oninput="tasks[${i}].wrong=this.value;draw()">`;
             c.appendChild(d);
         });
     }
@@ -62,8 +62,10 @@
         return `<iframe srcdoc='<!DOCTYPE html><html><body style="margin:0;overflow:hidden;background:transparent;font-family:sans-serif">
             <div id="g" style="position:relative;width:400px;height:500px">
                 <div id="p" style="position:absolute;top:20px;right:20px;width:${pSize}px;height:${pSize}px;background:url(${pUrl}) no-repeat center/contain;transition:0.8s ease-in-out"></div>
-                <div id="l" style="position:absolute;top:5px;right:10px;font-size:24px"></div>
-                <div id="clock" style="position:absolute;top:5px;left:10px;font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val"></span></div>
+                <div id="info-panel" style="position:absolute;top:5px;left:10px;display:flex;flex-direction:column;gap:5px;">
+                    <div id="clock" style="font-size:20px;color:${timerCol};font-weight:bold;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:10px;border:1px solid ${timerCol}">🕒 <span id="time-val"></span></div>
+                    <div id="l" style="font-size:24px;text-align:left;"></div>
+                </div>
             </div>
             <div id="msg-box" style="display:none; position:absolute; top:100px; left:50px; width:300px; padding:20px; border:2px solid ${winBorder}; background:${winBg}; color:${winCol}; font-size:24px; font-weight:bold; text-align:center; border-radius:15px; z-index:100;">${winText}</div>
             <div id="m" style="position:absolute;bottom:0px;right:0px;width:200px;height:180px;background:${mCol};opacity:0.9;padding:10px;text-align:center;color:${txtCol};z-index:50">
@@ -86,7 +88,6 @@
                 const platformCoords = [];
                 tasks.forEach((_,i)=>{
                     const d=document.createElement("div");
-                    // Спуск справа налево: X уменьшается, Y уменьшается
                     const x = 320 - (i * 40), y = 400 - (i * 40);
                     platformCoords.push({x: x, y: 500 - y - ${pSize}});
                     d.style="position:absolute;width:50px;height:10px;background:${pCol};right:"+ (400 - x - 50) +"px;top:"+ (500 - y - 10) +"px;border-radius:5px";
@@ -116,7 +117,7 @@
     }
 
     function draw() { document.getElementById('preview-frame').innerHTML = getCode(); }
-    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Код скопирован!"); }
+    function copyCode() { navigator.clipboard.writeText(getCode()); alert("Code copied!"); }
     renderEditor(); draw();
 </script>
 </body>
